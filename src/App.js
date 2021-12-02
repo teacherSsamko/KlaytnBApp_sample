@@ -1,7 +1,47 @@
 import logo from './logo.svg';
+import Caver from 'caver-js';
 import './App.css';
 
+const COUNNT_CONTRACT_ADDRESS = '0x0B793f5740AbC02E259A6eA8740aAC69d6974de6'
+const ACCESS_KEY_ID = 'KASKASKASKASKASKASKASKAS'; // TODO: make secret
+const SECRET_ACCESS_KEY = '9abcdabcdabcdabcdabcdabcdabcdabcddabcdhw';
+const CHAIN_ID = '1001'; // TESTNET 1001, MAINNET 8217
+const COUNT_ABI = '[ { "constant": false, "inputs": [ { "name": "_count", "type": "uint256" } ], "name": "setCount", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "count", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getBlockNumber", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ]'
+
+const option = {
+  headers: [
+    {
+      name: "Authorization",
+      value: "Basic " + Buffer.from(ACCESS_KEY_ID + ":" + SECRET_ACCESS_KEY).toString('base64')
+    },
+    {
+      name: "x-chain-id", value: CHAIN_ID
+    }
+  ]
+}
+
+const caver = new Caver(new Caver.providers.HttpProvider('https://node-api.klaytnapi.com/v1/klaytn', option));
+const CountContract = new caver.contract(JSON.parse(COUNT_ABI), COUNNT_CONTRACT_ADDRESS);
+const readCount = async () => {
+  const _count = await CountContract.methods.count().call();
+  console.log(_count);
+}
+
+const getBalance = (address) => {
+  return caver.rpc.klay.getBalance(address).then((response) => {
+    const balance = caver.utils.convertFromPeb(caver.utils.hexToNumberString(response));
+    console.log("BALANCE", balance)
+    return balance;
+  })
+}
+
+// 1 Get Smart Contract Address
+// 2 Link to Smart Contract using caver-js
+// 3 Display Result of the Smart Contract on App screen
+
 function App() {
+  readCount();
+  getBalance('0x933bcb4908bdf20bfc85516cfc48f381d26a689c');
   return (
     <div className="App">
       <header className="App-header">
