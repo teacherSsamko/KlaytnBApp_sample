@@ -35,6 +35,25 @@ const getBalance = (address) => {
   })
 }
 
+const setCount = async (newCount) => {
+  try {
+    // set account to use
+    const privatekey = '0x1a2s3d4f'
+    const deployer = caver.wallet.keyring.createFromPrivateKey(privatekey);
+    caver.wallet.add(deployer);
+    // send transcation for executing smart contract
+    // check result
+
+    const receipt = await CountContract.methods.setCount(newCount).send({
+      from: deployer.address,
+      gas: "0x4bfd200" // balance will be returned
+    })
+    console.log(receipt);
+  } catch (e) {
+    console.log(`[ERROR_SET_COUNT]${e}`);
+  }
+}
+
 // 1 Get Smart Contract Address
 // 2 Link to Smart Contract using caver-js
 // 3 Display Result of the Smart Contract on App screen
@@ -46,6 +65,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <button onClick={() => { setCount(100) }}>setCount 100</button>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
