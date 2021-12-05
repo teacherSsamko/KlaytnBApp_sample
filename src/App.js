@@ -21,6 +21,9 @@ function App() {
   const onClickGetAddress = () => {
     KlipAPI.getAddress(setQrvalue);
   };
+  const onClickSetCount = () => {
+    KlipAPI.setCount(2000, setQrvalue);
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -32,6 +35,7 @@ function App() {
           {" "}
           get address{" "}
         </button>{" "}
+        <button onClick={onClickSetCount}>set Count</button>
         <br />
         <QRCode value={qrvalue} /> <p> {balance} </p>{" "}
         <a
