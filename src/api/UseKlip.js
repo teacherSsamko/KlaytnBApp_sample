@@ -27,7 +27,9 @@ export const setCount = (count, setQrvalue) => {
             axios.get(`https://a2a-api.klipwallet.com/v2/a2a/result?request_key=${request_key}`).then((res) => {
                 if (res.data.result) {
                     console.log(`[Result] ${JSON.stringify(res.data.result)}`);
-                    clearInterval(timerId);
+                    if (res.data.result.status === 'success') {
+                        clearInterval(timerId);
+                    }
                 }
             });
         }, 1000)
